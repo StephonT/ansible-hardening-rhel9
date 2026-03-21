@@ -1,0 +1,1 @@
+# ansible-hardening-rhel9
