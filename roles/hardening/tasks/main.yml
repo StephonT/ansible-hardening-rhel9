@@ -1,2 +1,26 @@
 ---
-# tasks file for roles/hardening
+- name: Ensure firewalld is running and enabled
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Allow required services through firewall
+  ansible.posix.firealld:
+    zone: "{{ hardening_firewall_zone }}"
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop: "{{ hardening_firewall_services_allowed }}"
+  notify: Reload firewalld
+
+- name: Removed disallowed services from firewall 
+  ansible.posix.firewalld:
+    zone: "{{ hardening_firewall_zone }}"
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: disabled
+  loop: "{{ hardening_firewall_services_blocked }}"
+  notify: Reload firewalld
