@@ -47,3 +47,30 @@
   loop: "{{ hardening_selinux_booleans }}"
 
   # ---- Fail2Ban
+
+- name: Install EPEL repository
+  ansible.builtin.dnf:
+    name: epel-release
+    state: present 
+
+- name: Install fail2ban packages
+  ansible.builtin.dnf:
+    name: "{{ hardening_packages | reject('equalto', 'epel-release') | list }}"
+    state: present
+
+- name: Deploy fail2ban jail configuration
+  ansible.builtin.template:
+    src: hardening.conf.j2
+    dest: "{{ hardening_fail2ban_jail_config }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart fail2ban
+
+- name: Enable and start fail2ban
+  ansible.builtin.service:
+    name: fail2ban
+    state: started
+    enabled: true
+
+
