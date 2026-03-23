@@ -24,3 +24,26 @@
     state: disabled
   loop: "{{ hardening_firewall_services_blocked }}"
   notify: Reload firewalld
+
+# ---- SELinux
+
+- name: Set SELinux mode
+  ansible.posix.selinux:
+    state: "{{ hardening_selinux_state }}"
+    policy: "{{ hardening_selinux_policy }}"
+  register: selinux_result
+
+- name: Reboot if SELinux mode changed
+  ansible.builtin.reboot:
+    msg: "Rebooting to apply SELinux mode change"
+    reboot_timeout: 300
+  when: selinux_result.reboot_required | default(false)
+
+- name: Set SELinux booleans
+  ansible.posix.seboolean:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    persistent: true
+  loop: "{{ hardening_selinux_booleans }}"
+
+  # ---- Fail2Ban
