@@ -6,7 +6,7 @@
     enabled: true
 
 - name: Allow required services through firewall
-  ansible.posix.firealld:
+  ansible.posix.firewalld:
     zone: "{{ hardening_firewall_zone }}"
     service: "{{ item }}"
     permanent: true
