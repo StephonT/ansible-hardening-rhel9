@@ -48,10 +48,16 @@
 
   # ---- Fail2Ban
 
+- name: Import EPEL 9 GPG Key
+  ansible.builtin.rpm_key:
+    key: "{{ hardening_epel_gpg_key }}"
+    state: present
+
 - name: Install EPEL repository
   ansible.builtin.dnf:
-    name: epel-release
+    name: "{{ hardening_epel_rpm }}"
     state: present 
+    disable_gpg_check: false
 
 - name: Install fail2ban packages
   ansible.builtin.dnf:

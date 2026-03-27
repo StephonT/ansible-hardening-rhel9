@@ -1,6 +1,6 @@
 ---
 - name: Apply system hardening
-  hosts: test
+  hosts: all
   become: true
   roles:
     - role: hardening
