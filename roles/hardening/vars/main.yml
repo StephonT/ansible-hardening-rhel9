@@ -1,6 +1,6 @@
 ---
 hardening_packages:
-  - epel-release
   - fail2ban
   - fail2ban-firewalld 
+hardening_epel_rpm: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 hardening_fail2ban_jail_config: /etc/fail2ban/jail.d/hardening.conf 
