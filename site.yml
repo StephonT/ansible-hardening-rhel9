@@ -1,0 +1,3 @@
+---
+# System Hardening Automation - Full Wokflow
+- import_playbook: harden.yml
